@@ -11,11 +11,11 @@ const SideBar = () => {
     selectedUser,
     setSelectedUser,
     unseenMessages,
+    clearUnseenMessages, // ✅ Use this from context
   } = useContext(ChatContext);
 
   const { logout, onlineUsers } = useContext(AuthContext);
   const [input, setInput] = useState('');
-
   const navigate = useNavigate();
 
   const filteredUsers = input
@@ -28,7 +28,6 @@ const SideBar = () => {
     getUsers();
   }, [onlineUsers]);
 
-  // Helper: check if user is online
   const isUserOnline = (userId) => {
     if (!Array.isArray(onlineUsers)) return false;
     return (
@@ -88,6 +87,7 @@ const SideBar = () => {
           <div
             onClick={() => {
               setSelectedUser(user);
+              clearUnseenMessages(user._id); // ✅ Clear unseen count on open
             }}
             key={index}
             className={`relative flex items-center gap-2 p-2 pl-4 rounded cursor-pointer max-sm:text-sm ${

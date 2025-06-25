@@ -12,6 +12,14 @@ export const ChatProvider = ({ children }) => {
 
   const { socket, axios } = useContext(AuthContext);
 
+  // ✅ Clears unseen message count for a user
+  const clearUnseenMessages = (userId) => {
+    setUnseenMessages((prevUnseenMessages) => ({
+      ...prevUnseenMessages,
+      [userId]: 0,
+    }));
+  };
+
   // Fetch all users for sidebar
   const getUsers = async () => {
     try {
@@ -71,7 +79,6 @@ export const ChatProvider = ({ children }) => {
     });
   };
 
-  // Unsubscribe from socket messages
   const unsubscribeFromMessages = () => {
     if (socket && typeof socket.off === "function") {
       socket.off("newMessage");
@@ -93,7 +100,7 @@ export const ChatProvider = ({ children }) => {
     setSelectedUser,
     unseenMessages,
     setUnseenMessages,
-    getMessages,
+    clearUnseenMessages, // ✅ Exported for Sidebar use
   };
 
   return (
