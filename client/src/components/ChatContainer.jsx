@@ -52,12 +52,8 @@ const ChatContainer = () => {
         <img src={selectedUser.profilePic || assets.avatar_icon} alt="profile" className='w-8 rounded-full' />
         <p className='flex-1 text-lg text-white flex items-center gap-2'>
           {selectedUser.fullName}
-          <span
-            title={onlineUsers.includes(selectedUser._id) ? 'Online' : 'Offline'}
-            className={`w-2 h-2 rounded-full ${
-              onlineUsers.includes(selectedUser._id) ? 'bg-green-500' : 'bg-red-500'
-            }`}
-          ></span>
+          {onlineUsers.includes(selectedUser._id) && <span className='w-2 h-2 rounded-full bg-green-500'></span>}
+
         </p>
         <img
           onClick={() => setSelectedUser(null)}
