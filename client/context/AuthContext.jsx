@@ -1,20 +1,19 @@
 import { createContext, useEffect, useState } from "react";
 import axios from 'axios'; 
 import toast from "react-hot-toast";
-import { io } from 'socket.io-client'; // ✅ Correct import
-// Removed: import {connect} from 'socket.io-client'
-import { data } from "react-router-dom"; // ❌ Unused, can be removed
-
-const backendUrl = import.meta.env.VITE_BACKEND_URL;
-axios.defaults.baseURL = backendUrl;
+import { io } from 'socket.io-client';
 
 export const AuthContext = createContext();
+
+// ✅ Use correct environment variable (no quotes or spaces in .env)
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
+axios.defaults.baseURL = backendUrl;
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [authUser, setAuthUser] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
-  const [socket, setSocket] = useState(null); // ✅ should be null, not []
+  const [socket, setSocket] = useState(null);
 
   // ✅ Connect to socket server
   const connectSocket = (userData) => {
@@ -81,7 +80,7 @@ export const AuthProvider = ({ children }) => {
     setOnlineUsers([]);
     axios.defaults.headers.common["token"] = null;
     if (socket) {
-      socket.disconnect(); // ✅ Only if socket exists
+      socket.disconnect();
     }
     toast.success("Logged Out Successfully");
   };
@@ -99,7 +98,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // ✅ Set default token on load and check auth
+  // ✅ On mount: set token and check auth
   useEffect(() => {
     if (token) {
       axios.defaults.headers.common["token"] = token;
